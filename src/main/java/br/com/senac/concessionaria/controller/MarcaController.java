@@ -18,18 +18,23 @@ public class MarcaController {
     @Autowired
     private MarcaRepository marcaRepository;
 
+    @CrossOrigin(origins = "*")
     @PostMapping
     public ResponseEntity<Void> criarMarca(@RequestBody MarcaRequest marcaRequest){
         Marca marcaModel = new Marca();
 
         marcaModel.setNome(marcaRequest.getNome());
         marcaModel.setDescricao(marcaRequest.getDescricao());
+        try {
+            marcaRepository.save(marcaModel);
 
-        marcaRepository.save(marcaModel);
-
-        return ResponseEntity.ok().body(null);
+            return ResponseEntity.ok().body(null);
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 
+    @CrossOrigin(origins = "*")
     @GetMapping
     public ResponseEntity<List<MarcaResponse>> retornarMarcas(){
         // criar lista vazia
