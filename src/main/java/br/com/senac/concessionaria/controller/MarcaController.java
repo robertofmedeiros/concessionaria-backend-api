@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping({"/marca"})
@@ -53,5 +55,48 @@ public class MarcaController {
         }
 
         return ResponseEntity.ok().body(marcaResponseList);
+    }
+
+    @DeleteMapping(path = {"/{id}"})
+    public ResponseEntity<Void> removerMarca(@PathVariable Long id){
+
+        marcaRepository.deleteById(id);
+
+        return ResponseEntity.ok().body(null);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Void> removerMarcaAll(){
+
+        marcaRepository.deleteAll();
+
+        return ResponseEntity.ok().body(null);
+    }
+
+    @PutMapping(path = {"/{id}"})
+    public ResponseEntity<Void> atualizarMarca(@RequestBody MarcaRequest marcaRequest, @PathVariable Long id){
+        Optional<Marca> marca;
+
+        marca = marcaRepository.findById(id)
+                .map(record -> {
+                   record.setDescricao(marcaRequest.getDescricao());
+                   record.setNome(marcaRequest.getNome());
+                   return marcaRepository.save(record);
+                });
+
+        return ResponseEntity.ok().body(null);
+    }
+
+    @GetMapping(path = {"/{id}"})
+    public ResponseEntity<MarcaResponse> carregarMarcaById(@PathVariable Long id){
+
+        Optional<Marca> marca = marcaRepository.findById(id);
+
+        MarcaResponse marcaResponse = new MarcaResponse();
+        marcaResponse.setId(marca.get().getId());
+        marcaResponse.setNome(marca.get().getNome());
+        marcaResponse.setDescricao(marca.get().getDescricao());
+
+        return ResponseEntity.ok().body(marcaResponse);
     }
 }
