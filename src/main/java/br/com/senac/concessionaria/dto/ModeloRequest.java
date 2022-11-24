@@ -4,6 +4,8 @@ public class ModeloRequest {
     private Long id;
     private String nome;
 
+    private Long idMarca;
+
     public Long getId() {
         return id;
     }
@@ -18,5 +20,13 @@ public class ModeloRequest {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public Long getIdMarca() {
+        return idMarca;
+    }
+
+    public void setIdMarca(Long idMarca) {
+        this.idMarca = idMarca;
     }
 }
