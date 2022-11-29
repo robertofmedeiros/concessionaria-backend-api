@@ -2,8 +2,11 @@ package br.com.senac.concessionaria.controller;
 
 import br.com.senac.concessionaria.dto.MarcaRequest;
 import br.com.senac.concessionaria.dto.MarcaResponse;
+import br.com.senac.concessionaria.dto.ModeloResponse;
 import br.com.senac.concessionaria.modelo.Marca;
+import br.com.senac.concessionaria.modelo.Modelo;
 import br.com.senac.concessionaria.repository.MarcaRepository;
+import br.com.senac.concessionaria.repository.ModeloRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +22,9 @@ public class MarcaController {
 
     @Autowired
     private MarcaRepository marcaRepository;
+
+    @Autowired
+    private ModeloRepository modeloRepository;
 
     @CrossOrigin(origins = "*")
     @PostMapping
@@ -52,6 +58,37 @@ public class MarcaController {
         // laço de repetição para percorrer a lista de marcas
         for(Marca dadoMarca : marcaList){
             marcaResponseList.add(new MarcaResponse(dadoMarca.getId(), dadoMarca.getNome(), dadoMarca.getDescricao()));
+        }
+
+        return ResponseEntity.ok().body(marcaResponseList);
+    }
+
+    @CrossOrigin(origins = "*")
+    @GetMapping(path = {"/modelos/"})
+    public ResponseEntity<List<MarcaResponse>> retornarMarcasModelo(){
+        // criar lista vazia
+        List<Marca> marcaList = new ArrayList<>();
+
+        // carrega informações do banco de dados
+        // adiciona na lista vazia
+        marcaList = marcaRepository.findAll();
+
+        // cria lista vazia para retorno
+        List<MarcaResponse> marcaResponseList = new ArrayList<>();
+
+        // laço de repetição para percorrer a lista de marcas
+        for(Marca dadoMarca : marcaList){
+
+            List<Modelo> modeloList =
+                    modeloRepository.getModelos(dadoMarca.getId());
+
+            List<ModeloResponse> modeloResponses = new ArrayList<>();
+
+            for(Modelo modelo : modeloList){
+                modeloResponses.add(new ModeloResponse(modelo.getId(), modelo.getNome()));
+            }
+
+            marcaResponseList.add(new MarcaResponse(dadoMarca.getId(), dadoMarca.getNome(), dadoMarca.getDescricao(), modeloResponses));
         }
 
         return ResponseEntity.ok().body(marcaResponseList);

@@ -6,10 +6,18 @@ public class ModeloResponse {
 
     private MarcaResponse marca;
 
-    public ModeloResponse(Long id, String nome, MarcaResponse marca) {
+    private PlacaResponse placa;
+
+    public ModeloResponse(Long id, String nome, MarcaResponse marca, PlacaResponse placa) {
         this.id = id;
         this.nome = nome;
         this.marca = marca;
+        this.placa = placa;
+    }
+
+    public ModeloResponse(Long id, String nome) {
+        this.id = id;
+        this.nome = nome;
     }
 
     public Long getId() {
@@ -34,5 +42,13 @@ public class ModeloResponse {
 
     public void setMarca(MarcaResponse marca) {
         this.marca = marca;
+    }
+
+    public PlacaResponse getPlaca() {
+        return placa;
+    }
+
+    public void setPlaca(PlacaResponse placa) {
+        this.placa = placa;
     }
 }

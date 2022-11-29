@@ -15,6 +15,10 @@ public class Modelo {
     @JoinColumn(name = "idMarca", nullable = false)
     private Marca marca;
 
+    @ManyToOne
+    @JoinColumn(name = "idPlaca")
+    private Placa placa;
+
     public Long getId() {
         return id;
     }
@@ -37,5 +41,13 @@ public class Modelo {
 
     public void setMarca(Marca marca) {
         this.marca = marca;
+    }
+
+    public Placa getPlaca() {
+        return placa;
+    }
+
+    public void setPlaca(Placa placa) {
+        this.placa = placa;
     }
 }

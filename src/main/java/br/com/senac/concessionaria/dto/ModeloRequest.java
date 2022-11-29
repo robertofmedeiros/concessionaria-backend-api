@@ -6,6 +6,8 @@ public class ModeloRequest {
 
     private Long idMarca;
 
+    private Long idPlaca;
+
     public Long getId() {
         return id;
     }
@@ -28,5 +30,13 @@ public class ModeloRequest {
 
     public void setIdMarca(Long idMarca) {
         this.idMarca = idMarca;
+    }
+
+    public Long getIdPlaca() {
+        return idPlaca;
+    }
+
+    public void setIdPlaca(Long idPlaca) {
+        this.idPlaca = idPlaca;
     }
 }

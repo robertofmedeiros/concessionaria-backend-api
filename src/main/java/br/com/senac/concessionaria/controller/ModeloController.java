@@ -3,10 +3,13 @@ package br.com.senac.concessionaria.controller;
 import br.com.senac.concessionaria.dto.MarcaResponse;
 import br.com.senac.concessionaria.dto.ModeloRequest;
 import br.com.senac.concessionaria.dto.ModeloResponse;
+import br.com.senac.concessionaria.dto.PlacaResponse;
 import br.com.senac.concessionaria.modelo.Marca;
 import br.com.senac.concessionaria.modelo.Modelo;
+import br.com.senac.concessionaria.modelo.Placa;
 import br.com.senac.concessionaria.repository.MarcaRepository;
 import br.com.senac.concessionaria.repository.ModeloRepository;
+import br.com.senac.concessionaria.repository.PlacaRepository;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,14 +28,20 @@ public class ModeloController {
     @Autowired
     private MarcaRepository marcaRepository;
 
+    @Autowired
+    private PlacaRepository placaRepository;
+
     @PostMapping
     public ResponseEntity<Void> criarModelo(@RequestBody ModeloRequest modeloRequest){
         Modelo modeloModel = new Modelo();
 
         Optional<Marca> marca = marcaRepository.findById(modeloRequest.getIdMarca());
 
+        Optional<Placa> placa = placaRepository.findById(modeloRequest.getIdPlaca());
+
         modeloModel.setNome(modeloRequest.getNome());
         modeloModel.setMarca(marca.get());
+        modeloModel.setPlaca(placa.get());
 
         modeloRepository.save(modeloModel);
 
@@ -56,6 +65,8 @@ public class ModeloController {
 
             Marca marca = dadoModelo.getMarca();
 
+            Placa placa = dadoModelo.getPlaca();
+
             MarcaResponse marcaResponse = new MarcaResponse();
             if(marca != null){
                 marcaResponse.setId(marca.getId());
@@ -63,7 +74,13 @@ public class ModeloController {
                 marcaResponse.setNome(marca.getNome());
             }
 
-            marcaResponseList.add(new ModeloResponse(dadoModelo.getId(), dadoModelo.getNome(), marcaResponse));
+            PlacaResponse placaResponse = new PlacaResponse();
+            if(placa != null){
+                placaResponse.setId(placa.getId());
+                placaResponse.setNumero(placa.getNumero());
+            }
+
+            marcaResponseList.add(new ModeloResponse(dadoModelo.getId(), dadoModelo.getNome(), marcaResponse, placaResponse));
         }
 
         return ResponseEntity.ok().body(marcaResponseList);
